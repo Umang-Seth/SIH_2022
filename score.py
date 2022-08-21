@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-import pandas as pd
+#import pandas as pd
+
 #from skimage import io, img_as_float
 
 
@@ -10,7 +11,7 @@ def get_blurrness_score(image):
     # image = cv2.imread(img)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     fm = cv2.Laplacian(image, cv2.CV_64F).var()
-    return fm // 100
+    return fm
 
 
 def average_pixel_width(img):
@@ -42,11 +43,11 @@ def centroid(img):
     return [cX, cY]
 
 
-img = cv2.imread("12.jpeg")
-
-# imgResize = cv2.resize(img,(400,60)
-cv2.imshow("Output", img)
-# score = color_analysis(img)
-print(get_blurrness_score(img), average_pixel_width(img), sharpness_score(img))
-cv2.waitKey(0)
+# img = cv2.imread("12.jpeg")
+#
+# # imgResize = cv2.resize(img,(400,60)
+# cv2.imshow("Output", img)
+# # score = color_analysis(img)
+# print(get_blurrness_score(img), average_pixel_width(img), sharpness_score(img))
+# cv2.waitKey(0)
 
