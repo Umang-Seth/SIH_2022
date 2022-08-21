@@ -33,7 +33,7 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     # return the resized image
     return resized
 myPath = "data/Aadhar/"
-img = cv2.imread(str(myPath)+'front.jpg')
+img = cv2.imread(str(myPath)+'back.jpg')
 image = image_resize(img, width=600, height = 800)
 
 blur3 = cv2.blur(image,(3,3))
@@ -61,15 +61,15 @@ print('Gblur7',get_blurrness_score(Gblur7))
 print('median7',get_blurrness_score(median7))
 
 cv2.imshow("image",image)
-cv2.imwrite(myPath+str(get_blurrness_score(image))+'_front.jpg', image)
-cv2.imwrite(myPath+str(get_blurrness_score(blur3))+'_front_blur3.jpg', blur3)
-cv2.imwrite(myPath+str(get_blurrness_score(Gblur3))+'_front_Gblur3.jpg', Gblur3)
-cv2.imwrite(myPath+str(get_blurrness_score(median3))+'_front_median3.jpg', median3)
-cv2.imwrite(myPath+str(get_blurrness_score(blur5))+'_front_blur5.jpg', blur5)
-cv2.imwrite(myPath+str(get_blurrness_score(Gblur5))+'_front_Gblur5.jpg', Gblur5)
-cv2.imwrite(myPath+str(get_blurrness_score(median5))+'_front_median5.jpg', median5)
-cv2.imwrite(myPath+str(get_blurrness_score(blur7))+'_front_blur7.jpg', blur7)
-cv2.imwrite(myPath+str(get_blurrness_score(Gblur7))+'_front_Gblur7.jpg', Gblur7)
-cv2.imwrite(myPath+str(get_blurrness_score(median7))+'_front_median7.jpg', median7)
+cv2.imwrite(myPath+str(get_blurrness_score(image))+'_back.jpg', image)
+cv2.imwrite(myPath+str(get_blurrness_score(blur3))+'_back_blur3.jpg', blur3)
+cv2.imwrite(myPath+str(get_blurrness_score(Gblur3))+'_back_Gblur3.jpg', Gblur3)
+cv2.imwrite(myPath+str(get_blurrness_score(median3))+'_back_median3.jpg', median3)
+cv2.imwrite(myPath+str(get_blurrness_score(blur5))+'_back_blur5.jpg', blur5)
+cv2.imwrite(myPath+str(get_blurrness_score(Gblur5))+'_back_Gblur5.jpg', Gblur5)
+cv2.imwrite(myPath+str(get_blurrness_score(median5))+'_back_median5.jpg', median5)
+cv2.imwrite(myPath+str(get_blurrness_score(blur7))+'_back_blur7.jpg', blur7)
+cv2.imwrite(myPath+str(get_blurrness_score(Gblur7))+'_back_Gblur7.jpg', Gblur7)
+cv2.imwrite(myPath+str(get_blurrness_score(median7))+'_back_median7.jpg', median7)
 
 cv2.waitKey(0)
