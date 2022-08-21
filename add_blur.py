@@ -32,7 +32,7 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
 
     # return the resized image
     return resized
-myPath = "data/Aadhar/"
+myPath = "data/Voter/"
 img = cv2.imread(str(myPath)+'back.jpg')
 image = image_resize(img, width=600, height = 800)
 
