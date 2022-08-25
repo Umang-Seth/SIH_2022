@@ -127,15 +127,13 @@ def filterAadhar(text):
     for i in text:
         if (str.isupper(i[0]) is True) and len(i) > 2:
             temp.append(i)
-
-    for i in range(0, len(temp) - 1):
-        if temp[i] == 'Card':
-            new_text["Card Number"] = temp[i + 1]
-
-        elif temp[i] == 'Name' and name_count == 0:
-            if str.isupper(temp[i + 1]) is True:
-                new_text["Name"] = temp[i + 1] + " " + temp[i + 2]
-            name_count = 1
+    #print(temp)
+    # for i in range(0, len(temp) - 1):
+    #
+    #     if temp[i] == 'Name' and name_count == 0:
+    #         if str.isupper(temp[i + 1]) is True:
+    new_text["Name"] = str(temp[0] + " " + temp[1])
+            # name_count = 1
 
         # elif temp[i] == 'Name':
         #     if str.isupper(temp[i + 1]) is True and str.isupper(temp[i + 2]) is True and str.isupper(
@@ -145,17 +143,27 @@ def filterAadhar(text):
         #     else:
         #         new_text["Father's Name"] = temp[i + 1] + " " + temp[i + 2]
 
+        # else:
+        #     pass
+
+    for i in range(0,len(text)):
+        print(len(text))
+        if text[i].find("DOB") >=0:
+            new_text["DOB"] = text[i+ 1]
+        else:
+            pass
+        print("jcn",text[i].find('MALE'))
+    if str('MALE') in text:
+        print(';mvsvn')
+    for i in range(0, len(text)):
+        if text[i].find("MALE") and text[i].find("FEMALE"):
+            print(text[i])
+            new_text["GENDER"] = text[i]
         else:
             pass
 
-    re.search(r'^DOB$',text)
-    if "Birth" in text:
-        new_text["DOB"] = text[text.index(re.compile(r'^DOB$')) + 1]
-    else:
-        pass
-
-    #return new_text
-    print(new_text)
+    return new_text
+    # print(new_text)
 
 
 
