@@ -137,7 +137,7 @@ def final_score(image):
     #print(score)
     avg = (((score['blur']/4)+(score['uniformity'])+(score['sharpness']*10)+(score['text_score'])+(score['face']*100))/5)
     #print(avg)
-    return int(avg)
+    return avg
     #
     # cv2.imshow("Output", img)
     # cv2.waitKey(0)
