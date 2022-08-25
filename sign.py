@@ -1,6 +1,9 @@
 import cv2
-import mediapipe as mp
-import time
+import matplotlib.pyplot as plt
+import skimage
+from skimage import measure, morphology
+from skimage.color import label2rgb
+from skimage.measure import regionprops
 
 def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     # initialize the dimensions of the image to be resized and
@@ -33,32 +36,13 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
     # return the resized image
     return resized
 
-
-image = cv2.imread('data/Passport/front.jpg')
+image = cv2.imread('data/Pan/front2.jpg')
 img = image_resize(image, width=600, height = 800)
-imgCrop = img[100:750,175:450]
-cv2.rectangle(img, (150, 200), (450, 650), (255, 0, 255), 2)
+imgCrop = img[400:650,50:450]
+imgWarpGray = cv2.cvtColor(imgCrop, cv2.COLOR_BGR2GRAY)
+imageT = cv2.threshold(imgWarpGray, 127, 255, cv2.THRESH_BINARY)[1]
 
-
-mpFaceDetection = mp.solutions.face_detection
-mpDraw = mp.solutions.drawing_utils
-faceDetection = mpFaceDetection.FaceDetection()
-
-imgRGB = cv2.cvtColor(imgCrop, cv2.COLOR_BGR2RGB)
-results = faceDetection.process(imgRGB)
-print(results)
-
-if results.detections:
-    for id,detection in enumerate(results.detections):
-        print(detection.score)
-        print(detection.location_data.relative_bounding_box)
-        bboxC = detection.location_data.relative_bounding_box
-        ih, iw, ic = imgCrop.shape
-        bbox = int(bboxC.xmin * iw), int(bboxC.ymin * ih), \
-               int(bboxC.width * iw), int(bboxC.height * ih),
-        cv2.rectangle(imgCrop,bbox,(255,0,255),2)
-
-cv2.imshow('Image', img)
-cv2.imshow('Crop',imgCrop)
+cv2.imshow('Threshold',imgWarpGray)
+cv2.imshow('Binary',imageT)
 
 cv2.waitKey(0)
