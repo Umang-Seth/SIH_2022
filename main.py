@@ -1,41 +1,12 @@
-
 import numpy as np
 # import pandas as pd
 import cv2
 import pytesseract
-from dewarpper import dewarp_book
-# from sign_detect import extract_signature
 import mediapipe as mp
-def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
-    # initialize the dimensions of the image to be resized and
-    # grab the image size
-    dim = None
-    (h, w) = image.shape[:2]
+from dewarpper import dewarp_book
+#from sign_detect import extract_signature
 
-    # if both the width and height are None, then return the
-    # original image
-    if width is None and height is None:
-        return image
 
-    # check to see if the width is None
-    if width is None:
-        # calculate the ratio of the height and construct the
-        # dimensions
-        r = height / float(h)
-        dim = (int(w * r), height)
-
-    # otherwise, the height is None
-    else:
-        # calculate the ratio of the width and construct the
-        # dimensions
-        r = width / float(w)
-        dim = (width, int(h * r))
-
-    # resize the image
-    resized = cv2.resize(image, dim, interpolation = inter)
-
-    # return the resized image
-    return resized
 def get_blurrness_score(image):
     # image = cv2.imread(img)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -75,7 +46,7 @@ def sharpness_score(img):
 def ExtractText(img):
     # Import required packages
 
-    pytesseract.pytesseract.tesseract_cmd = 'C:\\Users\\mangl\\Tesseract-OCR\\tesseract.exe'
+    pytesseract.pytesseract.tesseract_cmd = "C:\\Program Files\\Tesseract-OCR\\tesseract.exe"
     text = []
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     himg, wimg, _ = img.shape
@@ -135,42 +106,42 @@ def filter(text):
     # print(new_text)
 
 
-def face_detection(image):
-    mpFaceDetection = mp.solutions.face_detection
-    mpDraw = mp.solutions.drawing_utils
-    faceDetection = mpFaceDetection.FaceDetection()
 
-    imgRGB = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-    results = faceDetection.process(imgRGB)
-
-    if results.detections:
-        for id, detection in enumerate(results.detections):
-            return detection.score
+def face_detect(image):
+    face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.1, 4)
+    if faces.all():
+        return 1
+    else:
+        return 0
 
 
-# def final_score(image):
-#     img = cv2.imread(image)
-#
-#     # img = cv2.resize(img, (800, 200))
-#     # img = dewarp_book(img)
-#     print(list(img.shape))
-#     score = {"blur": get_blurrness_score(img), "uniformity": average_pixel_width(img),
-#              "sharpness": sharpness_score(img), "text": ExtractText(img), "Face": face_detection(img)}
-#     # cv2.imshow('Image', img)
-#     #
-#     #
-#     # print("_____")
-#     # face_detection(im)
-#     # print("///
-#
-#     text = ExtractText(img)
-#     print(text)
-#     if len(text) == 4:
-#         score['text_score'] = 100
-#     else:
-#         score['text_score'] = 0
-#     #
-#     return score
+def final_score(image):
+    img = cv2.imread(image)
+
+    im = cv2.resize(img, (800, 200))
+    # im = image_resize(im, width=600, height=800)
+
+    # im = dewarp_book(im)
+    score = {"blur": get_blurrness_score(img), "uniformity": average_pixel_width(img),
+             "sharpness": sharpness_score(img), "text": ExtractText(img),"face":face_detect(img)}
+
+
+    text = ExtractText(img)
+    if len(text) == 4:
+        score['text_score'] = 100
+    else:
+        score['text_score'] = 0
+
+    #print(score)
+    avg = (((score['blur']/4)+(score['uniformity'])+(score['sharpness']*10)+(score['text_score'])+(score['face']*100))/5)
+    #print(avg)
+    return int(avg)
+    #
+    # cv2.imshow("Output", img)
+    # cv2.waitKey(0)
+    # return score
     # new_img = dewarp_book(img)
     # new_img = cv2.resize(new_img, (1280, 720))
     #
@@ -179,16 +150,5 @@ def face_detection(image):
     # # new_img = extract_signature(new_img)
     # # cv2.imshow("Output", new_img)
     # cv2.waitKey(0)
-#
-# final_score('C:/Users/mangl/PycharmProjects/djangouploads/images/front2.jpg')
-image = cv2.imread('data/Aadhar/front.jpg')
-img = image_resize(image, width=600, height = 800)
-img1 = dewarp_book(img)
-# score = {"blur": get_blurrness_score(img1), "uniformity": average_pixel_width(img1),
-#              "sharpness": sharpness_score(img1), "text": ExtractText(img1), "Face": face_detection(img1)}
-print(face_detection(img1))
+final_score('data/Pan/front.jpg')
 
-cv2.imshow("Blank", img)
-cv2.imshow("Blank1", img1)
-
-cv2.waitKey(0)
