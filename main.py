@@ -11,7 +11,10 @@ def get_blurrness_score(image):
     # image = cv2.imread(img)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     fm = cv2.Laplacian(image, cv2.CV_64F).var()
-    return fm
+    if fm > 100:
+        return 1
+    else:
+        return 0
 
 
 def average_pixel_width(img):
@@ -26,12 +29,12 @@ def average_pixel_width(img):
     return apw
 
 
-def sharpness_score(img):
-    # img = cv2.imread(image)
-    laplacian = cv2.Laplacian(img, cv2.CV_64F)
-    gnorm = np.sqrt(laplacian ** 2)
-    sharpness = np.average(gnorm)
-    return sharpness
+# def sharpness_score(img):
+#     # img = cv2.imread(image)
+#     laplacian = cv2.Laplacian(img, cv2.CV_64F)
+#     gnorm = np.sqrt(laplacian ** 2)
+#     sharpness = np.average(gnorm)
+#     return sharpness
 
 
 # def centroid(img):
@@ -125,8 +128,7 @@ def final_score(image):
 
     # im = dewarp_book(im)
     score = {"blur": get_blurrness_score(img), "uniformity": average_pixel_width(img),
-             "sharpness": sharpness_score(img), "text": ExtractText(img),"face":face_detect(img)}
-
+             "text": ExtractText(img),"face":face_detect(img)}
 
     text = ExtractText(img)
     if len(text) == 4:
@@ -134,11 +136,11 @@ def final_score(image):
     else:
         score['text_score'] = 0
 
-    #print(score)
-    avg = (((score['blur']/4)+(score['uniformity'])+(score['sharpness']*10)+(score['text_score'])+(score['face']*100))/5)
-    #print(avg)
+    print(score)
+    avg = (((score['blur']*100)+(score['uniformity'])+(score['text_score'])+(score['face']*100))/4)
+    print(avg)
     return avg
-    #
+
     # cv2.imshow("Output", img)
     # cv2.waitKey(0)
     # return score
@@ -150,5 +152,5 @@ def final_score(image):
     # # new_img = extract_signature(new_img)
     # # cv2.imshow("Output", new_img)
     # cv2.waitKey(0)
-final_score('data/Pan/front.jpg')
+final_score('data/Aadhar/back3.jpg')
 
