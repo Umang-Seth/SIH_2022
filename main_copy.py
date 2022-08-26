@@ -13,7 +13,10 @@ def get_blurrness_score(image):
     # image = cv2.imread(img)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
     fm = cv2.Laplacian(image, cv2.CV_64F).var()
-    return fm
+    if fm > 100:
+        return 1
+    else:
+        return 0
 
 
 def average_pixel_width(img):
@@ -62,12 +65,12 @@ def ExtractText(img):
                 x, y, w, h = int(b[6]), int(b[7]), int(b[8]), int(b[9])
                 cv2.rectangle(img, (x, y), (w + x, h + y), (0, 0, 255), 3)
                 cv2.putText(img, b[11], (x, y + 25), cv2.FONT_HERSHEY_COMPLEX, 1, (50, 50, 250), 2)
-                print(b[11])
+                #print(b[11])
                 text.append(b[11])
 
-    cv2.imshow("result",img)
+    #cv2.imshow("result",img)
     x = filterAadhar(text)
-    print(text)
+    #print(text)
     return x
 
 def face_detect(image):
@@ -201,23 +204,23 @@ def image_resize(image, width = None, height = None, inter = cv2.INTER_AREA):
 def final_score(image):
     img = cv2.imread(image)
 
-    im = cv2.resize(img, (800, 200))
-    # im = image_resize(im, width=600, height=800)
+    #im = cv2.resize(img, (800, 200))
+    im = image_resize(img, width=600, height = 800)
 
     # im = dewarp_book(im)
     score = {"blur": get_blurrness_score(img), "uniformity": average_pixel_width(img),
-             "sharpness": sharpness_score(img), "text": ExtractText(img),"face":face_detect(img)}
+             "sharpness": sharpness_score(img), "text": ExtractText(im),"face":face_detect(img)}
 
 
     text = ExtractText(img)
-    if len(text) == 4:
+    if len(text) == 5:
         score['text_score'] = 100
     else:
         score['text_score'] = 0
 
-    #print(score)
-    avg = (((score['blur']/4)+(score['uniformity'])+(score['sharpness']*10)+(score['text_score'])+(score['face']*100))/5)
+    avg = (((score['blur'] * 100) + (score['uniformity']) + (score['text_score']) + (score['face'] * 100)) / 4)
     #print(avg)
+    #print(score)
     return avg
     #
     # cv2.imshow("Output", img)
@@ -234,12 +237,12 @@ def final_score(image):
 
 
 
-#final_score('data/Pan/front.jpg')
-img = cv2.imread('data/Aadhar/shivam.jpg')
-imgResize = image_resize(img, width=600, height = 800)
-cv2.imshow('Image',imgResize)
-text = ExtractText(imgResize)
-print(text)
-cv2.imshow('Image Resize',imgResize)
-
-cv2.waitKey(0)
+final_score('data/Aadhar/shivam.jpg')
+# img = cv2.imread('data/Aadhar/shivam.jpg')
+# imgResize = image_resize(img, width=600, height = 800)
+# cv2.imshow('Image',imgResize)
+# text = ExtractText(imgResize)
+# #print(text)
+# cv2.imshow('Image Resize',imgResize)
+#
+# cv2.waitKey(0)
