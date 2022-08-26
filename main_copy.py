@@ -123,6 +123,7 @@ def filterAadhar(text):
 
     temp = []
     new_text = {}
+    number = []
     # name_count = 0
     for i in text:
         if (str.isupper(i[0]) is True) and len(i) > 2:
@@ -148,15 +149,19 @@ def filterAadhar(text):
 
     for i in range(0,len(text)):
         #print(text[i].find("MALE"))
-        if text[i].find("DOB") >=0:
+        if text[i].find("DOB") >= 0:
             new_text["DOB"] = text[i+ 1]
-        elif text[i].find("MALE")>=0 or text[i].find("FEMALE")>=0:
+        elif text[i].find("MALE") >= 0 or text[i].find("FEMALE") >= 0:
             new_text["GENDER"] = text[i]
-        if text[i].find("Mobile")>=0:
+        elif text[i].find("Mobile") >= 0:
             new_text["MOBILE"] = text[i+2]
+        elif text[i].isnumeric():
+            if len(text[i])==4:
+                number.append(text[i])
         else:
             pass
-
+    new_text["AADHAR"] = str(number[0] + " " + number[1] + " " + number[2])
+    #print(number)
     return new_text
     # print(new_text)
 
